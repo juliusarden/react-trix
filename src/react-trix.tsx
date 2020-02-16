@@ -12,6 +12,7 @@ export interface MergeTags {
 }
 
 export interface TrixEditorProps {
+  id?: string;
   autoFocus?: boolean;
   placeholder?: string;
   toolbar?: string;
@@ -56,7 +57,7 @@ export class TrixEditor extends React.Component<TrixEditorProps, TrixEditorState
   constructor(props: TrixEditorProps) {
     super(props);
 
-    this.id = this.generateId();
+    this.id = props.id || this.generateId();
 
     this.state = {
       showMergeTags: false,
@@ -194,7 +195,7 @@ export class TrixEditor extends React.Component<TrixEditorProps, TrixEditorState
     }
 
     const editorPosition = document.getElementById("trix-editor-top-level").getBoundingClientRect();
-    
+
     // current cursor position
     const rect = this.editor.getClientRectAtPosition(this.editor.getSelectedRange()[0]);
     const boxStyle = {
@@ -241,7 +242,7 @@ export class TrixEditor extends React.Component<TrixEditorProps, TrixEditorState
     if (props.placeholder) {
       attributes["placeholder"] = props.placeholder;
     }
-		
+
     if (props.toolbar) {
         attributes["toolbar"] = props.toolbar;
     }
