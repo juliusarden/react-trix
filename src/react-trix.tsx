@@ -56,15 +56,14 @@ export class TrixEditor extends React.Component<TrixEditorProps, TrixEditorState
   private d: HTMLDivElement = null;
   constructor(props: TrixEditorProps) {
     super(props);
-
-    this.id = props.id || this.generateId();
+    this.id = props.id || TrixEditor.generateId();
 
     this.state = {
       showMergeTags: false,
       tags: []
     }
   }
-  private generateId(): string {
+  private static generateId(): string {
     let timestamp = Date.now();
     let uniqueNumber = 0;
 

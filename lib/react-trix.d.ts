@@ -8,6 +8,7 @@ export interface MergeTags {
     tags: Array<MergeTag>;
 }
 export interface TrixEditorProps {
+    id?: string;
     autoFocus?: boolean;
     placeholder?: string;
     toolbar?: string;
@@ -45,7 +46,7 @@ export declare class TrixEditor extends React.Component<TrixEditorProps, TrixEdi
     private editor;
     private d;
     constructor(props: TrixEditorProps);
-    private generateId;
+    private static generateId;
     componentDidMount(): void;
     componentWillUnmount(): void;
     private handleChange;
