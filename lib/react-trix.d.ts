@@ -10,6 +10,7 @@ export interface MergeTags {
 export interface TrixEditorProps {
     id?: string;
     className?: string;
+    style?: object;
     autoFocus?: boolean;
     placeholder?: string;
     toolbar?: string;
