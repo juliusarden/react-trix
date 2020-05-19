@@ -13,12 +13,14 @@ export interface MergeTags {
 
 export interface TrixEditorProps {
   id?: string;
+  className?: string;
   autoFocus?: boolean;
   placeholder?: string;
   toolbar?: string;
   value?: string;
   uploadURL?: string;
   uploadData?: { [key: string]: string };
+  fileParamName?: string;
 
   /* list of available merge tag */
   mergeTags: Array<MergeTags>;
@@ -56,26 +58,21 @@ export class TrixEditor extends React.Component<TrixEditorProps, TrixEditorState
   private d: HTMLDivElement = null;
   constructor(props: TrixEditorProps) {
     super(props);
-    this.id = props.id || TrixEditor.generateId();
+    this.id = props.id || this.generateId();
 
     this.state = {
       showMergeTags: false,
       tags: []
     }
   }
-  private static generateId(): string {
-    let timestamp = Date.now();
-    let uniqueNumber = 0;
-
-    (() => {
-      // If created at same millisecond as previous
-      if (timestamp <= uniqueNumber) {
-        timestamp = ++uniqueNumber;
-      } else {
-        uniqueNumber = timestamp;
-      }
-    })();
-    return "T" + timestamp.toString();
+  private generateId(): string {
+    let dt = new Date().getTime();
+    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        let r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    });
+    return "T" + uuid;
   }
   componentDidMount() {
     let props = this.props;
@@ -158,8 +155,9 @@ export class TrixEditor extends React.Component<TrixEditorProps, TrixEditorState
         form.append(k, this.props.uploadData[k]);
       }
     }
+
     //form.append("Content-Type", "multipart/form-data");
-    form.append("file", file);
+    form.append((this.props.fileParamName || "file"), file);
     xhr = new XMLHttpRequest();
     xhr.open("POST", this.props.uploadURL, true);
     xhr.upload.onprogress = (event) => {
@@ -233,6 +231,10 @@ export class TrixEditor extends React.Component<TrixEditorProps, TrixEditorState
       "id": `editor-${this.id}`,
       "input": `input-${this.id}`
     };
+
+    if (props.className) {
+      attributes["class"] = props.className;
+    }
 
     if (props.autoFocus) {
       attributes["autoFocus"] = props.autoFocus.toString();

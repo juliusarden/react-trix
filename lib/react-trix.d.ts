@@ -9,6 +9,7 @@ export interface MergeTags {
 }
 export interface TrixEditorProps {
     id?: string;
+    className?: string;
     autoFocus?: boolean;
     placeholder?: string;
     toolbar?: string;
@@ -17,6 +18,7 @@ export interface TrixEditorProps {
     uploadData?: {
         [key: string]: string;
     };
+    fileParamName?: string;
     mergeTags: Array<MergeTags>;
     onEditorReady?: (editor: any) => void;
     onChange: (html: string, text: string) => void;
@@ -46,7 +48,7 @@ export declare class TrixEditor extends React.Component<TrixEditorProps, TrixEdi
     private editor;
     private d;
     constructor(props: TrixEditorProps);
-    private static generateId;
+    private generateId;
     componentDidMount(): void;
     componentWillUnmount(): void;
     private handleChange;

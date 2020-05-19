@@ -22,7 +22,6 @@ var TrixEditor = (function (_super) {
         _this.editor = null;
         _this.d = null;
         _this.id = props.id || _this.generateId();
-        console.log('id is ', _this.id, props.id);
         _this.state = {
             showMergeTags: false,
             tags: []
@@ -30,17 +29,13 @@ var TrixEditor = (function (_super) {
         return _this;
     }
     TrixEditor.prototype.generateId = function () {
-        var timestamp = Date.now();
-        var uniqueNumber = 0;
-        (function () {
-            if (timestamp <= uniqueNumber) {
-                timestamp = ++uniqueNumber;
-            }
-            else {
-                uniqueNumber = timestamp;
-            }
-        })();
-        return "T" + timestamp.toString();
+        var dt = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (dt + Math.random() * 16) % 16 | 0;
+            dt = Math.floor(dt / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        return "T" + uuid;
     };
     TrixEditor.prototype.componentDidMount = function () {
         var _this = this;
@@ -112,7 +107,7 @@ var TrixEditor = (function (_super) {
                 form.append(k, this.props.uploadData[k]);
             }
         }
-        form.append("file", file);
+        form.append((this.props.fileParamName || "file"), file);
         xhr = new XMLHttpRequest();
         xhr.open("POST", this.props.uploadURL, true);
         xhr.upload.onprogress = function (event) {
@@ -178,6 +173,9 @@ var TrixEditor = (function (_super) {
             "id": "editor-" + this.id,
             "input": "input-" + this.id
         };
+        if (props.className) {
+            attributes["class"] = props.className;
+        }
         if (props.autoFocus) {
             attributes["autoFocus"] = props.autoFocus.toString();
         }
